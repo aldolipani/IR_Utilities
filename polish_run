@@ -20,5 +20,5 @@ ITD=$(echo "$DUP" | xargs -n 2 bash -c 'grep -n $1 '$RUN' | grep $0 | sed 1d ' |
 if [ -z "${ITD}" ]; then
 	echo "$CLE"
 else
-    sed -e $ITD $CLE
+    echo "$CLE" | sed -e $ITD
 fi
