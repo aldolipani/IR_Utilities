@@ -1,0 +1,10 @@
+#!/bin/bash
+RUN=$1
+
+#find duplicates, list(topicId, documentId)
+DUP=$(cat $RUN | sed -e "s/[$(printf '\t') ][$(printf '\t') ]*/ /g" | cut -d" " -f 1,3 | awk '{ print $2 " " $1}' | sort | uniq -d | awk '{$1=$1;print}' | awk '{ print $2 " " $1}')
+
+#find index duplicates rows and remove from the polished file
+ITD=$(echo "$DUP" | xargs -n 2 bash -c 'grep -n $1 '$RUN' | grep $0 | sed 1d ' | cut -d':' -f 1 | sed "s/$/d;/" | xargs | sed "s/ //g" | sed "s/;$//") 
+
+sed -e $ITD $RUN
